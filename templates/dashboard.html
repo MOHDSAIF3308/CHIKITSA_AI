@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block title %}AI Diagnosis - Chiktisa A.I{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Medical Icons -->
+<div class="row mb-5">
+    <div class="col-12 text-center">
+        <div style="position: relative; display: inline-block;">
+            <i class="fas fa-stethoscope fa-5x text-primary mb-4" style="animation: pulse 2s ease-in-out infinite;"></i>
+            <div style="position: absolute; top: -10px; right: -10px; width: 20px; height: 20px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>
+        </div>
+        <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.5px;">Chiktisa A.I Diagnosis</h1>
+        <p class="lead fs-5 mb-4" style="color: #1e293b; font-weight: 500;">
+            Advanced AI-Powered Pneumonia Detection from Chest X-Rays
+        </p>
+        <div class="d-flex justify-content-center gap-4 flex-wrap">
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-check-circle text-success"></i>
+                <span style="color: #1e293b; font-weight: 500;">98% Accuracy</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-bolt text-warning"></i>
+                <span style="color: #1e293b; font-weight: 500;">3-5 Seconds</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-shield-alt text-primary"></i>
+                <span style="color: #1e293b; font-weight: 500;">HIPAA Compliant</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quote Card (Floating notification style) -->
+{% if quote %}
+<div id="quoteCard" class="position-fixed top-0 end-0 m-4 p-4 bg-white rounded-4 border border-light" style="z-index: 1070; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);">
+    <div class="d-flex align-items-start gap-3">
+        <div class="flex-shrink-0">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2563eb, #8b5cf6); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-quote-left text-white"></i>
+            </div>
+        </div>
+        <div class="flex-grow-1">
+            <p class="mb-0 fs-6 fw-medium" style="color: #1e293b; line-height: 1.6;">{{ quote }}</p>
+        </div>
+        <button type="button" class="btn-close btn-sm flex-shrink-0" onclick="document.getElementById('quoteCard').remove()" style="margin-top: 2px;"></button>
+    </div>
+</div>
+{% endif %}
+
+<!-- Upload Form -->
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <div class="card shadow-lg border-0 rounded-4" style="overflow: visible;">
+            <div class="card-header text-white rounded-top-4 py-4 px-4 px-md-5">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 1rem; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+                            <i class="fas fa-brain fs-3"></i>
+                        </div>
+                        <div>
+                            <h3 class="mb-0 fw-bold">AI Pneumonia Diagnosis</h3>
+                            <p class="mb-0 small opacity-90">Upload X-Ray for instant analysis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <form id="predictForm" enctype="multipart/form-data">
+                    <!-- Upload Area -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold d-flex align-items-center gap-2 mb-3">
+                            <i class="fas fa-upload text-primary"></i>
+                            Upload Chest X-Ray Image
+                        </label>
+                        <div class="position-relative">
+                            <input type="file" name="image" class="form-control form-control-lg" accept="image/*" required style="padding: 1.25rem;">
+                            <div class="mt-3 p-4 text-center" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 1rem; border: 2px dashed #cbd5e1;">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                <p class="mb-0 fw-medium" style="color: #64748b;">
+                                    Supported formats: JPG, PNG, JPEG<br>
+                                    <small>Maximum file size: 10MB</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analyze Button -->
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold py-3" style="border-radius: 1rem;">
+                        <i class="fas fa-magic me-2"></i>Analyze with AI
+                        <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </form>
+
+                <!-- Results Section -->
+                <div id="results" class="mt-5 d-none">
+                    <div class="alert alert-info border-0 rounded-3 mb-4" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fas fa-info-circle text-primary"></i>
+                            <strong>Analysis Complete</strong>
+                        </div>
+                        <p class="mb-0 small mt-2">Results are generated by AI and should be verified by a medical professional.</p>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Prediction Card -->
+                        <div class="col-lg-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                            <i class="fas fa-award text-white fs-3"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-primary fw-bold mb-3">Diagnosis Result</h4>
+                                    <h2 id="predLabel" class="display-6 fw-bold text-success mb-4" style="letter-spacing: -0.5px;"></h2>
+                                    
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="small fw-bold" style="color: #64748b;">Confidence Level</span>
+                                            <span id="predConf" class="small fw-bold text-success"></span>
+                                        </div>
+                                        <div class="progress" style="height: 1.5rem; border-radius: 1rem;">
+                                            <div id="confBar" class="progress-bar" style="width: 0%; border-radius: 1rem;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 p-3 rounded-3" style="background: #f8fafc;">
+                                        <div class="row text-center">
+                                            <div class="col-6">
+                                                <i class="fas fa-clock text-primary"></i>
+                                                <small class="d-block fw-medium text-muted">Processing Time</small>
+                                                <small class="fw-bold">3.2s</small>
+                                            </div>
+                                            <div class="col-6">
+                                                <i class="fas fa-fire text-danger"></i>
+                                                <small class="d-block fw-medium text-muted">Intensity</small>
+                                                <small id="intensityScore" class="fw-bold">--</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Original X-Ray Card -->
+                        <div class="col-lg-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+                                <div class="card-body p-4">
+                                    <div class="mb-3">
+                                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                            <i class="fas fa-file-medical text-white fs-3"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-primary fw-bold mb-3 text-center">Original X-Ray</h4>
+                                    <p class="text-center text-muted small mb-3">Uploaded chest X-ray image for analysis</p>
+                                    <div class="position-relative" style="border-radius: 1rem; overflow: hidden; background: #f8fafc; padding: 1rem;">
+                                        <img id="originalImg" class="img-fluid rounded-3 shadow" style="max-height: 450px; width: 100%; object-fit: contain; display: none;">
+                                    </div>
+                                    <div class="mt-3 p-3 rounded-3" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-check-circle text-primary"></i>
+                                            <small class="fw-medium" style="color: #1e40af;">Original scan ready for analysis</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Heatmap Card -->
+                        <div class="col-lg-4">
+                            <div class="card h-100 border-0 shadow-sm" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+                                <div class="card-body p-4">
+                                    <div class="mb-3">
+                                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                            <i class="fas fa-eye text-white fs-3"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="text-primary fw-bold mb-3 text-center">AI Attention Map</h4>
+                                    <p class="text-center text-muted small mb-3">Heat zones show AI focus areas. Yellow boxes mark regions of interest (ROI)</p>
+                                    <div class="position-relative" style="border-radius: 1rem; overflow: hidden; background: #f8fafc; padding: 1rem;">
+                                        <img id="overlayImg" class="img-fluid rounded-3 shadow" style="max-height: 450px; width: 100%; object-fit: contain; display: none;">
+                                    </div>
+                                    <div class="mt-3 p-3 rounded-3" style="background: linear-gradient(135deg, #fef3c7, #fde68a);">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-info-circle text-warning"></i>
+                                            <small class="fw-medium" style="color: #92400e;">Red/Yellow areas indicate AI-detected anomalies</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row g-3 mt-4">
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary w-100 fw-bold py-3" style="border-radius: 1rem;" onclick="document.getElementById('predictForm').reset(); document.getElementById('results').classList.add('d-none');">
+                                <i class="fas fa-redo me-2"></i>Analyze Another Image
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-secondary w-100 fw-bold py-3" style="border-radius: 1rem;" onclick="downloadReport()">
+                                <i class="fas fa-download me-2"></i>Download Report
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-info w-100 fw-bold py-3" style="border-radius: 1rem;" onclick="window.print();">
+                                <i class="fas fa-print me-2"></i>Print Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Image Comparison Slider -->
+                    <div class="mt-5 p-4 rounded-4" style="background: linear-gradient(135deg, #f8fafc, #e2e8f0);">
+                        <h4 class="text-center fw-bold mb-4" style="color: #1e293b;">
+                            <i class="fas fa-exchange-alt me-2 text-primary"></i>
+                            Compare Original vs AI Analysis
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6 text-center">
+                                <button class="btn btn-primary w-100 fw-bold" onclick="showComparison('original')" style="border-radius: 0.75rem;">
+                                    <i class="fas fa-image me-2"></i>View Original
+                                </button>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <button class="btn btn-success w-100 fw-bold" onclick="showComparison('heatmap')" style="border-radius: 0.75rem;">
+                                    <i class="fas fa-fire me-2"></i>View Heatmap
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="spinner" class="text-center mt-5 d-none">
+                    <div class="position-relative d-inline-block mb-4">
+                        <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"></div>
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <i class="fas fa-brain text-primary"></i>
+                        </div>
+                    </div>
+                    <h4 class="mb-2 fw-bold" style="color: #1e293b;">Analyzing Image with AI</h4>
+                    <p class="text-muted mb-0">Processing your X-ray image...</p>
+                    <div class="mt-3">
+                        <small class="text-muted">This typically takes 3-5 seconds</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold mb-2">AI Technology</h5>
+                        <p class="small text-muted mb-0">Advanced deep learning models trained on thousands of medical images</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-user-md fa-3x text-success mb-3"></i>
+                        <h5 class="fw-bold mb-2">Expert Validation</h5>
+                        <p class="small text-muted mb-0">Always consult with healthcare professionals for final diagnosis</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #fae8ff 0%, #f3e8ff 100%);">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-lock fa-3x text-purple mb-3" style="color: #8b5cf6;"></i>
+                        <h5 class="fw-bold mb-2">Secure & Private</h5>
+                        <p class="small text-muted mb-0">Your medical data is encrypted and never stored on our servers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

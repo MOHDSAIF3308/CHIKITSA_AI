@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Login - Chiktisa A.I{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="backdrop-filter: blur(30px); background: rgba(255,255,255,0.98);">
+            <div class="card-body p-5">
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <div class="mb-4">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #2563eb, #8b5cf6); border-radius: 1.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);">
+                            <i class="fas fa-user-md fa-3x text-white"></i>
+                        </div>
+                    </div>
+                    <h2 class="fw-bold mb-2" style="color: #1e293b;">Welcome Back</h2>
+                    <p class="text-muted mb-0">Sign in to access your medical dashboard</p>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold d-flex align-items-center gap-2">
+                            <i class="fas fa-user text-primary"></i>
+                            Username
+                        </label>
+                        <input type="text" class="form-control form-control-lg" name="username" placeholder="Enter your username" required autofocus>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold d-flex align-items-center gap-2">
+                            <i class="fas fa-lock text-primary"></i>
+                            Password
+                        </label>
+                        <div class="position-relative">
+                            <input type="password" id="passwordInput" class="form-control form-control-lg" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted" onclick="togglePassword()" style="z-index: 10;">
+                                <i id="passwordIcon" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label small text-muted" for="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                        <a href="#" class="small text-primary text-decoration-none fw-medium">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold py-3 mb-3" style="border-radius: 1rem;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="position-relative my-4">
+                    <hr style="opacity: 0.1;">
+                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 small text-muted">or</span>
+                </div>
+
+                <!-- Register Link -->
+                <div class="text-center">
+                    <p class="text-muted mb-3">Don't have an account?</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary fw-bold px-5 py-3 w-100" style="border-radius: 1rem;">
+                        <i class="fas fa-user-plus me-2"></i>Create New Account
+                    </a>
+                </div>
+
+                <!-- Security Badge -->
+                <div class="mt-4 p-3 rounded-3 text-center" style="background: linear-gradient(135deg, #f8fafc, #e2e8f0);">
+                    <div class="d-flex align-items-center justify-content-center gap-2 text-muted">
+                        <i class="fas fa-shield-alt text-success"></i>
+                        <small class="fw-medium">Secure & encrypted connection</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info Cards -->
+        <div class="row g-3 mt-4">
+            <div class="col-6">
+                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                    <div class="card-body text-center p-3">
+                        <i class="fas fa-clock text-primary mb-2"></i>
+                        <p class="small fw-bold mb-0">24/7 Access</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #dcfce7, #bbf7d0);">
+                    <div class="card-body text-center p-3">
+                        <i class="fas fa-lock text-success mb-2"></i>
+                        <p class="small fw-bold mb-0">HIPAA Secure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('passwordInput');
+    const passwordIcon = document.getElementById('passwordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}
