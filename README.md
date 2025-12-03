@@ -8,7 +8,7 @@
 *   **Problem Solved:** (Explain how this application helps healthcare professionals by automating certain aspects of disease detection.)
 *   **Features:**
     *   Integration of multiple A.I. models.
-    *   Image processing for X-ray analysis (inferred from `best_chest_xray_model.h5`).
+    *   Image processing for X-ray analysis.
     *   Web interface built with Flask for easy interaction.
 
 ## 🛠️ Technologies Used
@@ -50,13 +50,16 @@ Make sure you have Python installed on your system.
 
 ## 📊 Screenshots
 
+Here are screenshots of the application in action:
 
+*   **Dashboard View:**
+    ![Application dashboard screenshot](assets/screenshots/dashboard.png)
 
-*   **Main Dashboard:**
-    `![Main application dashboard screenshot](assets/screenshots/dashboard.png)`
+*   **Results Page:**
+    ![Screenshot showing detection results](assets/screenshots/results.png)
 
-*   **Prediction Results Page:**
-    `![Screenshot showing detection results](assets/screenshots/results.png)`
+*   **Additional View:**
+    ![Another user interface screenshot](assets/screenshots/Screenshot%202025-12-03%20165050.png)
 
 ## 🤝 Contributing
 
